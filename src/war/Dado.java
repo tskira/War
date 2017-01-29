@@ -11,7 +11,7 @@ package war;
  */
 public enum Dado {
     
-    AZUL(0,3), //dado para atk aereo
+    AZUL(0,4), //dado para atk aereo
     VERMELHO(1,6), //dado para atk terrestre
     AMARELO(1,6), //dado para defesa
     PRETO(7,7); //dado para roubar no jogo
@@ -24,7 +24,7 @@ public enum Dado {
         this.fin = fin;
     }
     
-    public int lancarDado(){ //metodo para lançar um dado
+    public int lancar(){ //metodo para lançar um dado
         return ((int)(Math.random()*fin + ini));
     }
 
