@@ -5,6 +5,7 @@
  */
 package war;
 
+
 /**
  *
  * @author Usuario
@@ -16,6 +17,10 @@ public class War {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        for(Territorio temp: Continente.ASIA.getPaises()){
+             System.out.println(temp.getNome()); 
+        }
+       
     }
     
 }
