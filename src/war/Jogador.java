@@ -23,4 +23,8 @@ public class Jogador {
     public void conqTerritorio(Territorio c){//adiciona novo territorio conquistado
         terriConquistado.add(c);
     }
+    
+    public Cor getCor(){
+        return cor;
+    }
 }
