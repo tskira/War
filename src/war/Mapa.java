@@ -15,15 +15,18 @@ import java.util.Map;
  */
 public class Mapa {
     
-        Map<int[], Territorio> mapaJogo = new HashMap<>(); //mapa do jogo
+        Map<int[], Territorio> tabuleiro = new HashMap<>(); //mapa do jogo
         
         Mapa(){ //construtor
             for (Continente c : Continente.values()){ //que porra é essa???
                 for(Territorio p: c.getPaises() ){
-                    mapaJogo.put(new int[]{p.getCordX(),p.getCordY()}, p);
+                    tabuleiro.put(new int[]{p.getCordX(),p.getCordY()}, p);
                 }
             }
         }
         
+        public Map<int[], Territorio> getTabuleiro(){
+            return tabuleiro;
+        }
         
 }
