@@ -25,8 +25,6 @@ public class Mapa {
             }
         }
         
-        public Map<int[], Territorio> getTabuleiro(){
-            return tabuleiro;
-        }
+        public Map<int[], Territorio> getTabuleiro(){return tabuleiro;}
         
 }
