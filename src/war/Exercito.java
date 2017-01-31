@@ -5,22 +5,11 @@
  */
 package war;
 
-import java.util.Scanner;
-
 /**
  *
  * @author Usuario
  */
-
-public class War {
+public abstract class Exercito {
     
-    
-    public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println(7/2);
-            
-                
-       
-    }
-    
+    public abstract int Combater();   
 }

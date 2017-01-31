@@ -5,22 +5,17 @@
  */
 package war;
 
-import java.util.Scanner;
-
 /**
  *
  * @author Usuario
  */
-
-public class War {
+public class Aereo extends Exercito{
     
+    Aereo(){};
     
-    public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println(7/2);
-            
-                
-       
-    }
+    @Override
+    public int Combater(){
+        return Dado.AZUL.lancar();
+    };
     
 }
