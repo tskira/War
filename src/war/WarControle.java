@@ -6,33 +6,50 @@
 package war;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ *  
  * @author Usuario
  */
 public class WarControle {
     
+    private static List<Jogador> players = new ArrayList<>(); //lista para jogadores no jogo
+    private static Mapa mapaJogo = new Mapa(); //mapa do jogo
     
-    List<Jogador> players = new ArrayList<>(); //lista para jogadores no jogo
-    Mapa mapaJogo = new Mapa();
+    private WarControle() { //construtor
+    }
     
-    public void setJogador(int i){ //adiciona jogadores ao jogo
+    public static WarControle getInstance() { //singleton
+        return WarControleHolder.INSTANCE;
+    }
+    
+    private static class WarControleHolder { //singleton
+        private static final WarControle INSTANCE = new WarControle();
+    }
+    
+    //metodo que retorna numero de jogadores
+    public static int numeroPlayers(){ return players.size(); }
+    
+    //metodo para adicionar o numero de jogadores
+    public static void setJogador(int i){ 
         for (int j = 0; j < i; j++) {
             players.add(new Jogador(Cor.values()[j]));
         }
     }
     
-    public void distribuirTerritorio(){ //distribuição de territorio aleatoria entre os jogadores
-        for(Territorio c: mapaJogo.getTabuleiro().values()){
-            c.setDono(players.get((int)(Math.random() * players.size())).getCor());
+    //metodo para distribuição de territorios
+    public static void distribuirTerritorio(){
+        List<Territorio> init = new ArrayList<>(); //lista para armazenar os territorios
+        for(Territorio c: mapaJogo.getTabuleiro().values()){ //adiciona os territorios a lista
+            init.add(c);
         }
+        Collections.shuffle(init); // embaralha lista
+        for (int i = 0; i < init.size(); i++) {
+            players.get(i% numeroPlayers()).conqTerritorio(init.get(i));
+        }
+        
     }
     
-    public int numeroPlayers(){ //retorna numero de jogadores
-        return players.size();
-    }
-    
-    WarControle(){}; //construtor
 }
