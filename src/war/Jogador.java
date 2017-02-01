@@ -16,48 +16,85 @@ import java.util.Scanner;
 public class Jogador {
     
     Cor cor;
-    List<Territorio> terriConquistado = new ArrayList<>(); 
-    List<Terrestre> terrestreDisp = new ArrayList<>();//lista de exercitos terrestre nao alocados 
-    List<Aereo> aereoDisp = new ArrayList<>();//lista de exercitos aereos nao alocados
+    //lista de territorios conquistados pelo jogador 
+    List<Territorio> terriConquistado = new ArrayList<>();
+    //lista de ex. terrestre disponiveis para alocação
+    List<Exercito> terDisp = new ArrayList<>();
+    //lista de ex. aereos disponiveis para alocação
+    List<Exercito> aerDisp = new ArrayList<>();
     
-    Jogador(Cor c){
+    Jogador(Cor c){ //construtor
         cor = c;
     }
     
-    public void conqTerritorio(Territorio c){terriConquistado.add(c);}
+    /* metodo para adicionar a lista de territorios um novo conquisado
+     * atualiza o campo dono do territorio
+     */
+    public void conqTerritorio(Territorio conquistado){
+        terriConquistado.add(conquistado);
+        conquistado.setDono(cor);
+    }
     
+    //metodo para retornar o numero de territorios
+    public int nroTerritorios(){ return terriConquistado.size();}
+    
+    //retorna cor que representa o jogador
     public Cor getCor(){return cor;}
     
-    public void moveExercito(Territorio ori, Territorio Dest){
-        //implementar
+    //metodo para retornar o numero de continentes
+    public int nroExercitos(Exercito exercito){
+        if(exercito instanceof Terrestre){
+            return terDisp.size();
+        }
+        else{ return aerDisp.size();}
     }
-    
-    public void receberExercitoT(){
-        for (int i = 0; i < (terriConquistado.size())/2; i++) {
-            terrestreDisp.add(new Terrestre());
+    /* metodo para receber exercitos
+     * Se o exercito for do tipo terrestre adiciona em terDisp
+     * Se for aereo adiciona em aerDisp
+     * polimorfismo sobrecarga interno
+     */
+    public void recebeExercito(Exercito novo){
+        if (novo instanceof Terrestre){
+            terDisp.add(novo);
+        }
+        else{
+            aerDisp.add(novo);
         }
     }
     
-    public void receberExercitoA(){
-        for (int i = 0; i < (terriConquistado.size())/3; i++) {
-            terrestreDisp.add(new Terrestre());
-        }
-    }
-    public int nroTExerc(){ return terrestreDisp.size();};
+    /* metodo para alocação de exercito
+     * utilização de polimorfismo para implemenação de diferentes contexto
+     * 1) alocar exercito disponivel em um territorio
+     * 2) alocar exercito disponivel de um territorio para outro
+     */
     
-    
-    public void alocarExercitoT(Territorio dest){
-        Scanner in = new Scanner(System.in);
-        int j = in.nextInt();
-        if( j >= nroTExerc()){
-            for (int i = 0; i < j; i++) {
-                terrestreDisp.remove(0);
-                dest.addTExercito();
+    public void alocarExercito(Territorio destino, Exercito exercito){ //primeiro caso
+        Scanner scan = new Scanner(System.in);
+        int x; //variavel para o nro de exercitos a serem deslocados
+        if(exercito instanceof Terrestre){
+            do {
+                x = scan.nextInt();
+            } while (x < nroExercitos(exercito));
+            for (int i = 0; i < x; i++) {
+                destino.recebeExercito(exercito);
+                terDisp.remove(0);
             }
         }
         else{
-            System.out.println("movimento nao permitido");
+            do {
+                x = scan.nextInt();
+            } while (x < nroExercitos(exercito));
+            for (int i = 0; i < x; i++) {
+                destino.recebeExercito(exercito);
+                aerDisp.remove(0);
+            }
         }
     }
     
+    //caso 2
+    public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito){
+        
+    }
+    
+
 }

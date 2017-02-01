@@ -18,8 +18,8 @@ public class Territorio {
     int cordX; //cordenadas no mapa
     int cordY; //cordenadas no mapa
     List<Territorio> fazFronteira = new ArrayList<>(); //paises vizinhos
-    List<Terrestre> exercitosT = new ArrayList<>(); //exercitos terrestre
-    List<Aereo> exercitosA = new ArrayList<>(); //exercitos aereos
+    List<Exercito> exercitosT = new ArrayList<>(); //exercitos terrestre
+    List<Exercito> exercitosA = new ArrayList<>(); //exercitos aereos
     Cor dono; //cor do atual dono do territorio
     
     Territorio(String nome, int x, int y){ //construtor
@@ -28,25 +28,26 @@ public class Territorio {
         cordY = y;
     }
     
+    /* metodo para atribuir exercito a um territorio
+     * utiliza sobrecarga interna
+     */
+    public void recebeExercito(Exercito exercito){
+        if (exercito instanceof Terrestre){
+            exercitosT.add(exercito);
+        }
+        else{
+            exercitosA.add(exercito);
+        }
+    }
+    
+    public void setFronteira(Mapa mapa ){
+        fazFronteira.add(mapa.get());
+    }
+    
     public String getNome(){return nome;}
     
     public void setDono(Cor c){dono = c;}
     
     public Cor getDono(){ return this.dono;}
     
-    public int getCordX(){return cordX;}
-    
-    public int getCordY(){return cordY;}
-    
-    public int getTExercito(){ return exercitosT.size();}
-    
-    public int getAExercito(){ return exercitosA.size();}
-        
-    public void addTExercito(){exercitosT.add(new Terrestre());}
-    
-    public void addAExercito(){exercitosA.add(new Aereo());}
-    
-    public void remTExercito(){exercitosT.remove(0);}
-    
-    public void remAExercito(){ exercitosA.remove(0);}
 }

@@ -15,16 +15,25 @@ import java.util.Map;
  */
 public class Mapa {
     
-        Map<int[], Territorio> tabuleiro = new HashMap<>(); //mapa do jogo
+        Map<int[], Territorio> mapa = new HashMap<>(); //mapa do jogo
         
         Mapa(){ //construtor
             for (Continente c : Continente.values()){ //que porra é essa???
                 for(Territorio p: c.getPaises() ){
-                    tabuleiro.put(new int[]{p.getCordX(),p.getCordY()}, p);
+                    mapa.put(new int[]{p.getCordX(),p.getCordY()}, p);
                 }
             }
         }
         
-        public Map<int[], Territorio> getTabuleiro(){return tabuleiro;}
+        /* metodo para retornar a lista de paises vizinhos
+         * recebe um territorio como referencia
+         * determina e retorna a lista de seus vizinhos
+         */
+        
+        public List<Territorio> setVizinhos(Territorio territorio){
+            
+        }    
+        
+        public Map<int[], Territorio> getTabuleiro(){return mapa;}
         
 }
