@@ -41,7 +41,7 @@ public class Territorio {
     }
     
     public void setFronteira(Mapa mapa ){
-        fazFronteira.add(mapa.get());
+        //implementar
     }
     
     public String getNome(){return nome;}
@@ -49,5 +49,9 @@ public class Territorio {
     public void setDono(Cor c){dono = c;}
     
     public Cor getDono(){ return this.dono;}
+    
+    public int getCordX(){ return cordX;}
+    
+    public int getCordY(){ return cordY;}
     
 }

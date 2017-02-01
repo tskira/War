@@ -93,6 +93,7 @@ public class Jogador {
     
     //caso 2
     public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito){
+        Scanner scan = new Scanner(System.in);
         
     }
     

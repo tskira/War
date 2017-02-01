@@ -30,7 +30,28 @@ public class Mapa {
          * determina e retorna a lista de seus vizinhos
          */
         
-        public List<Territorio> setVizinhos(Territorio territorio){
+        public void setVizinhos(Territorio territorio){
+            for(Continente c : Continente.values()){
+                for(Territorio t: c.getPaises()){
+                    vizinhos(t);
+                }
+            }
+        }
+        
+        public void vizinhos(Territorio territorio){
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{(((territorio.getCordX()-1)%5)+5)%5,
+                       territorio.getCordY()}));
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{((territorio.getCordX()+1)%5),
+                       territorio.getCordY()}));
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{territorio.getCordX(),
+                       (((territorio.getCordY()-1)%8)+8)%8}));
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{territorio.getCordX(),
+                       (territorio.getCordY()+1)%8}));
+            territorio.fazFronteira.removeAll(null);
             
         }    
         
