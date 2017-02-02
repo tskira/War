@@ -80,23 +80,24 @@ public class Jogador {
      * 2) alocar exercito disponivel de um territorio para outro
      */
     
-    public void alocarExercito(Territorio destino, Exercito exercito){ //primeiro caso
+    //primeiro caso
+    public void alocarExercito(Territorio destino, Exercito exercito){ 
         Scanner scan = new Scanner(System.in);
         int x; //variavel para o nro de exercitos a serem deslocados
         if(terriConquistado.contains(destino)){ //territorio pertence ao jogador
             do {    
                 x = scan.nextInt();
-            } while (x < nroExercitos(exercito));
+            } while (x < nroExercitos(exercito)); //nro de exercitos disponiveis
             if (exercito instanceof Terrestre){
                 for (int i = 0; i < x; i++) {
                     alocI.add(new ArgumentoAlocI(destino, exercito)); //adiciona a instruçao a lista
-                    terDisp.remove(0);
+                    terDisp.remove(0); //remove o exercito da lista
                 }
             }
             else{
                 for (int i = 0; i < x; i++) {
                     alocI.add(new ArgumentoAlocI(destino, exercito)); //adiciona a instruçao a lista
-                    aerDisp.remove(0);    
+                    aerDisp.remove(0); //remove o exercito da lista
                 }
             }
         }       
@@ -106,21 +107,32 @@ public class Jogador {
     public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito){
         Scanner scan = new Scanner(System.in);
         int x; //variavel para numero de exercitos a serem deslocados
-        if (origem.fazFronteira.contains(destino) && (destino.getDono() == cor) ){ //se faz fronteira com o territorio
+        //verifica se faz fronteira com o territorio e pertence ao atual jogador
+        if (origem.fazFronteira.contains(destino) && (destino.getDono() == cor) ){
         do {
             x = scan.nextInt();
         } while (x < origem.getNroExercitos(exercito));
             for (int i = 0; i < x; i++) {
-                alocII.add(new ArgumentoAlocII(origem, destino, exercito));
-                origem.removeExercito(exercito);
+                alocII.add(new ArgumentoAlocII(origem, destino, exercito)); //adiciona a instrução a lista
+                origem.removeExercito(exercito); //remove exercito do territorio de origem
             }
         }
     }
     
+    /* metodo para executar as lista de instrução do jogador
+     * recebe como parametro as duas lista de argumentos e executa elas
+     * este metodo foi implementado para prevenção e tratamento de erro
+     * no contexto do remanejamento de um exercito o mesmo nao podera ser realocado
+     * mais de uma vez
+     * a lista de instrução previne esse tipo de ação
+     */
     public void commitJogada(){
         WarControle.getInstance().commit(alocI, alocII);
     }
-                
+    
+    /* metodo para resetar as referefidas listas de instruções
+     * deve ser chamada a cada fim de rodada
+     */
     public void resetaMovimentos(){
         alocI.clear();
         alocII.clear();
