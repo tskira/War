@@ -27,8 +27,8 @@ public class War {
                 System.out.println(t.getNome());
             }
         }
-        System.out.println(teste1.Combater(true));
-        System.out.println(teste.Combater(true));
+        System.out.println(teste1.Combater());
+        System.out.println(teste.Combater());
     }
    
 }

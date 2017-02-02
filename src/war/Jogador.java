@@ -25,7 +25,8 @@ public class Jogador {
     List<Exercito> aerDisp = new ArrayList<>();
     //variavel para definir o jogador atual
     boolean atacante;
-    
+    //lista de instruções do jogador para alocar eercito caso 1
+    List<ArgumentoAlocI> alocI = new ArrayList<>();
     
     Jogador(Cor c){ //construtor
         cor = c;
@@ -96,13 +97,13 @@ public class Jogador {
             } while (x < nroExercitos(exercito));
             if (exercito instanceof Terrestre){
                 for (int i = 0; i < x; i++) {
-                    destino.recebeExercito(exercito);
+                    alocI.add(new ArgumentoAlocI(destino, exercito)); //adiciona a instruçao a lista
                     terDisp.remove(0);
                 }
             }
             else{
                 for (int i = 0; i < x; i++) {
-                    destino.recebeExercito(exercito);
+                    alocI.add(new ArgumentoAlocI(destino, exercito)); //adiciona a instruçao a lista
                     aerDisp.remove(0);    
                 }
             }

@@ -11,5 +11,5 @@ package war;
  */
 public abstract class Exercito {
     
-    public abstract int Combater(boolean atacante);   
+    public abstract int Combater();   
 }
