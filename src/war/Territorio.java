@@ -63,6 +63,8 @@ public class Territorio {
     
     public void setDono(Cor c){dono = c;}
     
+    public Cor getDono(){ return dono;}
+    
     public int getCordX(){ return cordX;}
     
     public int getCordY(){ return cordY;}
