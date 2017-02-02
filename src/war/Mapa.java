@@ -15,16 +15,46 @@ import java.util.Map;
  */
 public class Mapa {
     
-        Map<int[], Territorio> tabuleiro = new HashMap<>(); //mapa do jogo
+        Map<int[], Territorio> mapa = new HashMap<>(); //mapa do jogo
         
         Mapa(){ //construtor
             for (Continente c : Continente.values()){ //que porra é essa???
                 for(Territorio p: c.getPaises() ){
-                    tabuleiro.put(new int[]{p.getCordX(),p.getCordY()}, p);
+                    mapa.put(new int[]{p.getCordX(),p.getCordY()}, p);
                 }
             }
         }
         
-        public Map<int[], Territorio> getTabuleiro(){return tabuleiro;}
+        /* metodo para retornar a lista de paises vizinhos
+         * recebe um territorio como referencia
+         * determina e retorna a lista de seus vizinhos
+         */
+        
+        public void setVizinhos(Territorio territorio){
+            for(Continente c : Continente.values()){
+                for(Territorio t: c.getPaises()){
+                    vizinhos(t);
+                }
+            }
+        }
+        
+        public void vizinhos(Territorio territorio){
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{(((territorio.getCordX()-1)%5)+5)%5,
+                       territorio.getCordY()}));
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{((territorio.getCordX()+1)%5),
+                       territorio.getCordY()}));
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{territorio.getCordX(),
+                       (((territorio.getCordY()-1)%8)+8)%8}));
+            territorio.fazFronteira.add(mapa.get
+                       (new int[]{territorio.getCordX(),
+                       (territorio.getCordY()+1)%8}));
+            territorio.fazFronteira.removeAll(null);
+            
+        }    
+        
+        public Map<int[], Territorio> getTabuleiro(){return mapa;}
         
 }

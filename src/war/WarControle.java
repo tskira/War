@@ -29,27 +29,56 @@ public class WarControle {
         private static final WarControle INSTANCE = new WarControle();
     }
     
-    //metodo que retorna numero de jogadores
+    //metodo que retorna numero de jogadores em jogo
     public static int numeroPlayers(){ return players.size(); }
     
-    //metodo para adicionar o numero de jogadores
-    public static void setJogador(int i){ 
-        for (int j = 0; j < i; j++) {
+    public static List<Jogador> jogadores(){
+        return players;
+    }
+    
+    /* metodo para adicionar o numero de jogadores
+     * define uma cor para cada jogador
+     */
+    public static void setJogador(int nroJogadores){ 
+        for (int j = 0; j < nroJogadores; j++) {
             players.add(new Jogador(Cor.values()[j]));
         }
     }
     
-    //metodo para distribuição de territorios
+    /* metodo para distribuição de territorios
+     * itera-se sobre o enum continente, adicionando todos os territorio a uma  lista
+     * embaralha a lista distribuindo os territorios entre os jogadores
+     * inicializa cada territorio atribuindo a cor de respectivo jogador
+     * adiciona um exercito aereo e um terrestre em cada territiorio
+     */
     public static void distribuirTerritorio(){
-        List<Territorio> init = new ArrayList<>(); //lista para armazenar os territorios
-        for(Territorio c: mapaJogo.getTabuleiro().values()){ //adiciona os territorios a lista
-            init.add(c);
+        List<Territorio> territDist = new ArrayList<>(); //lista para armazenar os territorios
+        for(Territorio iterador: mapaJogo.getTabuleiro().values()){ 
+            territDist.add(iterador);//adiciona os territorios a lista
         }
-        Collections.shuffle(init); // embaralha lista
-        for (int i = 0; i < init.size(); i++) {
-            players.get(i% numeroPlayers()).conqTerritorio(init.get(i));
-        }
-        
+        Collections.shuffle(territDist); // embaralha lista
+        for (int i = 0; i < territDist.size(); i++) { //distribui a lista entre os jogadores
+            Jogador atualPlayer = players.get(i% numeroPlayers());
+            atualPlayer.conqTerritorio(territDist.get(i)); //atribui o ter. ao jogador
+            territDist.get(i).setDono(atualPlayer.cor); //seta o dono
+            territDist.get(i).exercitosA.add(new Aereo()); //adiciona um aereo
+            territDist.get(i).exercitosT.add(new Terrestre()); //adiciona um terrestre
+        }   
     }
     
+    /* metodo para atribuir novos exercitos para jogador
+     * este metodo foi atualizado para o modelo de jogo de war de verdade
+     * para terrestre nroTerritorios/2
+     * para aereos nroTerritoios/3
+     * todos os continentes contam com um bonus
+     * caso o jogador alvo tenha consquistado algum continente ele tera bonus adicional
+     */
+    public static void atribuirExercBonus(Jogador jogador){
+        for (int i = 0; i < jogador.nroTerritorios()/2; i++) {
+            jogador.recebeExercito(new Terrestre());
+        }
+        for (int i = 0; i < jogador.nroTerritorios()/3; i++) {
+            jogador.recebeExercito(new Aereo());
+        }
+    }
 }
