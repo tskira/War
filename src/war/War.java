@@ -17,10 +17,14 @@ public class War {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println(7/2);
-            
-                
-       
+        WarControle.getInstance().setJogador(2);
+        WarControle.getInstance().distribuirTerritorio();
+        for(Jogador p: WarControle.getInstance().jogadores()){
+            System.out.println("--------------------------------------------");
+            for(Territorio t: p.getTerritorio()){
+                System.out.println(t.getNome());
+            }
+        }
     }
     
 }

@@ -38,6 +38,11 @@ public class Jogador {
     //metodo para retornar o numero de territorios
     public int nroTerritorios(){ return terriConquistado.size();}
     
+    //metodo para pegar a lista de territorios conquistados
+    public List<Territorio> getTerritorio(){
+        return terriConquistado;
+    }
+    
     //retorna cor que representa o jogador
     public Cor getCor(){return cor;}
     
@@ -71,31 +76,51 @@ public class Jogador {
     public void alocarExercito(Territorio destino, Exercito exercito){ //primeiro caso
         Scanner scan = new Scanner(System.in);
         int x; //variavel para o nro de exercitos a serem deslocados
-        if(exercito instanceof Terrestre){
-            do {
+        if(terriConquistado.contains(destino)){ //territorio pertence ao jogador
+            do {    
                 x = scan.nextInt();
             } while (x < nroExercitos(exercito));
-            for (int i = 0; i < x; i++) {
-                destino.recebeExercito(exercito);
-                terDisp.remove(0);
+            if (exercito instanceof Terrestre){
+                for (int i = 0; i < x; i++) {
+                    destino.recebeExercito(exercito);
+                    terDisp.remove(0);
+                }
             }
-        }
-        else{
-            do {
-                x = scan.nextInt();
-            } while (x < nroExercitos(exercito));
-            for (int i = 0; i < x; i++) {
-                destino.recebeExercito(exercito);
-                aerDisp.remove(0);
+            else{
+                for (int i = 0; i < x; i++) {
+                    destino.recebeExercito(exercito);
+                    aerDisp.remove(0);    
+                }
             }
-        }
+        }       
     }
     
     //caso 2
     public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito){
         Scanner scan = new Scanner(System.in);
-        
+        int x; //variavel para numero de exercitos a serem deslocados
+        if (origem.fazFronteira.contains(destino)){ //se faz fronteira com o territorio
+        do {
+            x = scan.nextInt();
+        } while (x < origem.getNroExercitos(exercito));
+            if(exercito instanceof Terrestre){
+                for (int i = 0; i < x; i++) {
+                    destino.recebeExercito(exercito);
+                    origem.removeExercito(exercito);
+                }
+            }
+            else{
+                for (int i = 0; i < x; i++) {
+                    destino.recebeExercito(exercito);
+                    origem.removeExercito(exercito);
+                }
+            }
+        }
+        else{
+            System.out.println("Movimento nao permitido");
+        }
     }
+    
     
 
 }

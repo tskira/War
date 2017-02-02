@@ -39,16 +39,29 @@ public class Territorio {
             exercitosA.add(exercito);
         }
     }
-    
-    public void setFronteira(Mapa mapa ){
-        //implementar
+    /* metodo para exercito exercito do territorio
+     * utiliza sobrecarga interna
+     */
+    public void removeExercito(Exercito exercito){
+        if (exercito instanceof Terrestre){
+            exercitosT.remove(0);
+        }
+        else{
+            exercitosA.remove(0);
+        }      
     }
     
+    public int getNroExercitos(Exercito exercito){
+        if (exercito instanceof Terrestre){
+            return exercitosT.size();
+        }
+        else{
+            return exercitosA.size();
+        }
+    }
     public String getNome(){return nome;}
     
     public void setDono(Cor c){dono = c;}
-    
-    public Cor getDono(){ return this.dono;}
     
     public int getCordX(){ return cordX;}
     

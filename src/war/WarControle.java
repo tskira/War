@@ -32,6 +32,10 @@ public class WarControle {
     //metodo que retorna numero de jogadores em jogo
     public static int numeroPlayers(){ return players.size(); }
     
+    public static List<Jogador> jogadores(){
+        return players;
+    }
+    
     /* metodo para adicionar o numero de jogadores
      * define uma cor para cada jogador
      */
