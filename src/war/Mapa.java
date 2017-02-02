@@ -40,10 +40,10 @@ public class Mapa {
         
         public void vizinhos(Territorio territorio){
             territorio.fazFronteira.add(mapa.get
-                       (new int[]{(((territorio.getCordX()-1)%5)+5)%5,
+                       (new int[]{(territorio.getCordX()-1),
                        territorio.getCordY()}));
             territorio.fazFronteira.add(mapa.get
-                       (new int[]{((territorio.getCordX()+1)%5),
+                       (new int[]{(territorio.getCordX()+1),
                        territorio.getCordY()}));
             territorio.fazFronteira.add(mapa.get
                        (new int[]{territorio.getCordX(),
@@ -51,10 +51,11 @@ public class Mapa {
             territorio.fazFronteira.add(mapa.get
                        (new int[]{territorio.getCordX(),
                        (territorio.getCordY()+1)%8}));
-            territorio.fazFronteira.removeAll(null);
+            territorio.fazFronteira.removeAll(null); //remove territorios adicionados vazios
             
         }    
         
+        // metodo para receber o mapa
         public Map<int[], Territorio> getTabuleiro(){return mapa;}
         
 }

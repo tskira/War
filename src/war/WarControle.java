@@ -8,6 +8,7 @@ package war;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *  
@@ -81,4 +82,25 @@ public class WarControle {
             jogador.recebeExercito(new Aereo());
         }
     }
+    
+    /* metodo para comitar jogadas
+     * ao receber o comando de commit do jogador este controlador processa as
+     * ações definidas pelo jogador
+     */
+    public void commit(List<ArgumentoAlocI> ai, List<ArgumentoAlocII> aii){
+        
+    /* metodo para alocação de exercito
+     * utilização de polimorfismo para implemenação de diferentes contexto
+     * 1) alocar exercito disponivel em um territorio
+     */
+    
+        for (ArgumentoAlocI args: ai){
+            args.getTerritorio().recebeExercito(args.getExercito());   
+        }    
+        
+        
+        for (ArgumentoAlocII args: aii){
+            args.getDestino().recebeExercito(args.getExercito());
+        }
+    }    
 }

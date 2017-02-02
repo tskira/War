@@ -23,25 +23,17 @@ public class Jogador {
     List<Exercito> terDisp = new ArrayList<>();
     //lista de ex. aereos disponiveis para alocação
     List<Exercito> aerDisp = new ArrayList<>();
-    //variavel para definir o jogador atual
-    boolean atacante;
     //lista de instruções do jogador para alocar eercito caso 1
     List<ArgumentoAlocI> alocI = new ArrayList<>();
+    // lista de intruçoes do jogador para alocar exercito caso 2
+    List<ArgumentoAlocII> alocII = new ArrayList<>();
+    
     
     Jogador(Cor c){ //construtor
         cor = c;
-        atacante = false;
     }
     
-    // metodos get e set para atributo atacante
-    public void setAtacante(){
-        atacante = !atacante;
-    }
-    
-    public boolean getAtacante(){
-        return atacante;
-    }
-    
+
     /* metodo para adicionar a lista de territorios um novo conquisado
      * atualiza o campo dono do territorio
      */
@@ -83,7 +75,7 @@ public class Jogador {
     }
     
     /* metodo para alocação de exercito
-     * utilização de polimorfismo para implemenação de diferentes contexto
+     * Utiliza polimorfismo para duas situações:
      * 1) alocar exercito disponivel em um territorio
      * 2) alocar exercito disponivel de um territorio para outro
      */
@@ -114,28 +106,23 @@ public class Jogador {
     public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito){
         Scanner scan = new Scanner(System.in);
         int x; //variavel para numero de exercitos a serem deslocados
-        if (origem.fazFronteira.contains(destino)){ //se faz fronteira com o territorio
+        if (origem.fazFronteira.contains(destino) && (destino.getDono() == cor) ){ //se faz fronteira com o territorio
         do {
             x = scan.nextInt();
         } while (x < origem.getNroExercitos(exercito));
-            if(exercito instanceof Terrestre){
-                for (int i = 0; i < x; i++) {
-                    destino.recebeExercito(exercito);
-                    origem.removeExercito(exercito);
-                }
+            for (int i = 0; i < x; i++) {
+                alocII.add(new ArgumentoAlocII(origem, destino, exercito));
+                origem.removeExercito(exercito);
             }
-            else{
-                for (int i = 0; i < x; i++) {
-                    destino.recebeExercito(exercito);
-                    origem.removeExercito(exercito);
-                }
-            }
-        }
-        else{
-            System.out.println("Movimento nao permitido");
         }
     }
     
-    
-
+    public void commitJogada(){
+        WarControle.getInstance().commit(alocI, alocII);
+    }
+                
+    public void resetaMovimentos(){
+        alocI.clear();
+        alocII.clear();
+    }
 }
