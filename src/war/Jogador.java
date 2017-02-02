@@ -15,6 +15,7 @@ import java.util.Scanner;
  */
 public class Jogador {
     
+    //cor para representar o jogador
     Cor cor;
     //lista de territorios conquistados pelo jogador 
     List<Territorio> terriConquistado = new ArrayList<>();
@@ -22,9 +23,22 @@ public class Jogador {
     List<Exercito> terDisp = new ArrayList<>();
     //lista de ex. aereos disponiveis para alocação
     List<Exercito> aerDisp = new ArrayList<>();
+    //variavel para definir o jogador atual
+    boolean atacante;
+    
     
     Jogador(Cor c){ //construtor
         cor = c;
+        atacante = false;
+    }
+    
+    // metodos get e set para atributo atacante
+    public void setAtacante(){
+        atacante = !atacante;
+    }
+    
+    public boolean getAtacante(){
+        return atacante;
     }
     
     /* metodo para adicionar a lista de territorios um novo conquisado

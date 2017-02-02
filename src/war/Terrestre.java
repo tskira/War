@@ -14,7 +14,8 @@ public class Terrestre extends Exercito {
     Terrestre(){};
     
     @Override
-    public int Combater(){
-        return Dado.VERMELHO.lancar();
+    public int Combater(boolean atacante){
+        return (atacante ? Dado.VERMELHO.lancar()
+                         : Dado.AMARELO.lancar());
     }
 }

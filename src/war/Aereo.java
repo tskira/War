@@ -14,7 +14,7 @@ public class Aereo extends Exercito{
     Aereo(){};
     
     @Override
-    public int Combater(){
+    public int Combater(boolean atacante){
         return Dado.AZUL.lancar();
     };
     
