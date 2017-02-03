@@ -6,6 +6,7 @@
 package war;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,6 +28,8 @@ public class Jogador {
     List<ArgumentoAlocI> alocI = new ArrayList<>();
     // lista de intruçoes do jogador para alocar exercito caso 2
     List<ArgumentoAlocII> alocII = new ArrayList<>();
+    //vetor de inteiros que armazena o resultado dos dados lançads
+    int resultadosAtk[] = new int[3];
     
     
     Jogador(Cor c){ //construtor
@@ -136,5 +139,43 @@ public class Jogador {
     public void resetaMovimentos(){
         alocI.clear();
         alocII.clear();
+    }
+    
+    /* metodo que inicia o ataque a um territorio
+     * recebe como parametro o territorio alvo a ser atacado,
+     * o territorio de origem do ataque
+     * e o tipo de ataque (terrestre ou aereo)
+     * o numero de exercitos deslocados para o ataque
+     * este metodo nao implementara o metodo do commit
+     * implementa o polimorfismo
+     */
+    public int[] atacarTerritorio(Territorio origem, Territorio alvo,
+                                  Terrestre exercito, int nroAtk){
+        //verifica restriçoes de ataque
+        if(origem.podeAtacar() && alvo.podeSerAtacado(origem)){
+            for (int i = 0; i < nroAtk; i++){
+               resultadosAtk[i] = exercito.combater();
+            }
+        }
+        Arrays.sort(resultadosAtk);
+        return resultadosAtk; //retorna o vetor de resultados
+    }
+    
+    /* metodo para montar esqudilha a ser enviada para um atk aereo
+     * realiza as verificações de restrições para um atk aereo combinado
+     */
+    
+    /* metodo para o atk caso aereo
+     * o metodo recebe uma lista de para um ataque aereo combinado
+     */
+    public int[] atacarTerritorio(Territorio origem, Territorio alvo,
+                                  Aereo exercito, int nroAtk){
+        if (alvo.podeSerAtacado() && origem.fazFronteira.contains(alvo)){
+            for (int i = 0; i < nroAtk; i++) {
+                resultadosAtk[i] = exercito.combater();
+            }
+        }
+        Arrays.sort(resultadosAtk);
+        return resultadosAtk;//retorna o vetor de resultados
     }
 }

@@ -28,6 +28,24 @@ public class Territorio {
         cordY = y;
     }
     
+       
+    //alguns metodos get e set
+    
+    public String getNome(){return nome;}
+    
+    public void setDono(Cor c){dono = c;}
+    
+    public Cor getDono(){ return dono;}
+    
+    public int getCordX(){ return cordX;}
+    
+    public int getCordY(){ return cordY;}
+    
+    // metodo para pegar os paises fronteira
+    public List<Territorio> fronteira(){
+        return fazFronteira;
+    }
+    
     /* metodo para atribuir exercito a um territorio
      * utiliza sobrecarga interna
      */
@@ -39,6 +57,7 @@ public class Territorio {
             exercitosA.add(exercito);
         }
     }
+ 
     /* metodo para exercito exercito do territorio
      * utiliza sobrecarga interna
      */
@@ -51,6 +70,9 @@ public class Territorio {
         }      
     }
     
+    /* metodo para retornar o numero de exercitos
+     * de acordo com o parametro retorna o tamanho de aereo ou terrestre
+     */
     public int getNroExercitos(Exercito exercito){
         if (exercito instanceof Terrestre){
             return exercitosT.size();
@@ -59,14 +81,29 @@ public class Territorio {
             return exercitosA.size();
         }
     }
-    public String getNome(){return nome;}
     
-    public void setDono(Cor c){dono = c;}
+    /* os metodos a seguir verificar a possibilidade de atacar determinado territorio
+     * utiliza polimorfismo
+     */
     
-    public Cor getDono(){ return dono;}
+    //primeiro caso pra um ataque terrestre
+    public boolean podeSerAtacado(Territorio origem){
+        return (fazFronteira.contains(origem));
+    }
+    //segundo caso para um ataque aereo
+    public boolean podeSerAtacado(){
+        return ((getNroExercitos(Constante.TERRESTRE) > 3 )&& 
+                 getNroExercitos(Constante.AEREO) > 1 );
+    }
     
-    public int getCordX(){ return cordX;}
+    //metodo que verifica a permanencia de pelo menos 1 exercito no territorio
+    public boolean podeAtacar(){
+        return (getNroExercitos(Constante.TERRESTRE)>0);
+    }
     
-    public int getCordY(){ return cordY;}
+    /* metedo chamado para defesa de um territorio ao ser atacado
+     *
+     */
+
     
 }
