@@ -30,7 +30,10 @@ public class Jogador {
     List<ArgumentoAlocII> alocII = new ArrayList<>();
     //vetor de inteiros que armazena o resultado dos dados lançads
     int resultadosAtk[] = new int[3];
-    
+    //esquadrao de ataque combinado aereo
+    AereoComb esquadrao = new AereoComb();
+    //atributo que determina se o jogador venceu
+    boolean ganhou;
     
     Jogador(Cor c){ //construtor
         cor = c;
@@ -161,21 +164,27 @@ public class Jogador {
         return resultadosAtk; //retorna o vetor de resultados
     }
     
-    /* metodo para montar esqudilha a ser enviada para um atk aereo
-     * realiza as verificações de restrições para um atk aereo combinado
-     */
-    
     /* metodo para o atk caso aereo
      * o metodo recebe uma lista de para um ataque aereo combinado
      */
-    public int[] atacarTerritorio(Territorio origem, Territorio alvo,
-                                  Aereo exercito, int nroAtk){
-        if (alvo.podeSerAtacado() && origem.fazFronteira.contains(alvo)){
-            for (int i = 0; i < nroAtk; i++) {
-                resultadosAtk[i] = exercito.combater();
-            }
+    public int[] atacarTerritorio(Aereo exercito, Territorio alvo){
+        esquadrao.setEsquadrilha(alvo, this);
+        for(int k = 0; k < esquadrao.getEsquadrilha().size(); k++){
+            resultadosAtk[k] = exercito.combater();
         }
         Arrays.sort(resultadosAtk);
-        return resultadosAtk;//retorna o vetor de resultados
+        return resultadosAtk;
     }
+    
+    //metodo que verifica se o eujogador ven
+    public boolean verificaGanhou(){
+        int x = 0; //contador para numero de continentes conquistados
+        for(Continente c :Continente.values()){
+            if(terriConquistado.contains(c.getPaises())){
+                x++;
+            }
+        }
+        return(x>=2);
+    }
+    
 }

@@ -33,6 +33,9 @@ public class WarControle {
     //metodo que retorna numero de jogadores em jogo
     public static int numeroPlayers(){ return players.size(); }
     
+    //metodo que pega o mapa
+    public Mapa getMapaJogo(){return mapaJogo;}
+    
     public static List<Jogador> jogadores(){
         return players;
     }

@@ -18,7 +18,7 @@ public class Mapa {
         Map<int[], Territorio> mapa = new HashMap<>(); //mapa do jogo
         
         Mapa(){ //construtor
-            for (Continente c : Continente.values()){ //que porra é essa???
+            for (Continente c : Continente.values()){
                 for(Territorio p: c.getPaises() ){
                     mapa.put(new int[]{p.getCordX(),p.getCordY()}, p);
                 }

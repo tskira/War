@@ -13,5 +13,5 @@ public class Constante {
    
     public static final Terrestre TERRESTRE = new Terrestre();
     public static final Aereo AEREO = new Aereo();
-    
+    public static final int MAXIMO = 3;
 }

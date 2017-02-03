@@ -114,4 +114,9 @@ public enum Continente {
         return paises;
     }
     
+    public List<String> getAdj(){
+        return adjacentes;
+    }
+
+    public String getNome(){return nome;}
 }
