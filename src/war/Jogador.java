@@ -142,9 +142,13 @@ public class Jogador {
      * mais de uma vez
      * a lista de instrução previne esse tipo de ação
      */
-    public void commitJogada(){
-        WarControle.getInstance().commit(alocI, alocII);
+    public List<ArgumentoAlocI> commitJogadaI(){
+       return alocI;
     }
+    
+    public List<ArgumentoAlocII> commitJogadaII(){
+        return alocII;
+    }    
     
     /* metodo para resetar as referefidas listas de instruções
      * deve ser chamada a cada fim de rodada
@@ -178,9 +182,11 @@ public class Jogador {
      * o metodo recebe uma lista de para um ataque aereo combinado
      */
     public int[] atacarTerritorio(Aereo exercito, Territorio alvo){
-        esquadrao.setEsquadrilha(alvo, this);
-        for(int k = 0; k < esquadrao.getEsquadrilha().size(); k++){
-            resultadosAtk[k] = exercito.combater();
+        if(alvo.podeSerAtacado()){
+            esquadrao.setEsquadrilha(alvo, this);
+            for(int k = 0; k < esquadrao.getEsquadrilha().size(); k++){
+                resultadosAtk[k] = exercito.combater();
+            }
         }
         Arrays.sort(resultadosAtk);
         return resultadosAtk;
@@ -197,4 +203,7 @@ public class Jogador {
         return(x>=2);
     }
     
+    public void resetaAtks(){
+        Arrays.fill(resultadosAtk, 0);
+    }
 }

@@ -91,7 +91,7 @@ public class Territorio {
     
     //primeiro caso pra um ataque terrestre
     public boolean podeSerAtacado(Territorio origem){
-        return (fazFronteira.contains(origem));
+        return (fazFronteira.contains(origem)); //aqui cabe um tratamento de erro
     }
     //segundo caso para um ataque aereo
     public boolean podeSerAtacado(){
@@ -101,7 +101,7 @@ public class Territorio {
     
     //metodo que verifica a permanencia de pelo menos 1 exercito no territorio
     public boolean podeAtacar(){
-        return (getNroExercitos(Constante.TERRESTRE)>0);
+        return (getNroExercitos(Constante.TERRESTRE) > 0);
     }
     
     /* metedo chamado para defesa de um territorio ao ser atacado

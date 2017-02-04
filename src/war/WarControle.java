@@ -106,21 +106,41 @@ public class WarControle {
     } 
     
     // os metodos a seguir definem as ações dentro de um turno da jogada
-  
+    
+    /* primeira etapa: distribuição dos exercitos de bonificaçao
+     * faz chamadas sucessivas do metodo alocarExercito()
+     * apos o jogador ter alocado todos os exercitos é realizado o commit dos movimentos
+     * na sequencia essas listas sao esvaziadas.
+     */
     public void distribuição(Jogador jogador){
         Scanner scan = new Scanner(System.in);
         int cord[] = new int[2]; //inteiro para armazenar cordenada
         while(jogador.getTerDisp().isEmpty()){ //enquanto houverem eercitos terrestre disponiveis
             cord[0] = scan.nextInt();
             cord[1] = scan.nextInt();
-            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), jogador.getTerDisp().get(0));
+            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), Constante.TERRESTRE);
         } // alocou todos os exercitos terrestres disponiveis
         while(jogador.getAerDisp().isEmpty()){ //enquanto houverem eercitos terrestre disponiveis
             cord[0] = scan.nextInt();
             cord[1] = scan.nextInt();
-            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), jogador.getAerDisp().get(0));
+            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), Constante.AEREO);
         } //alocou todos os aereos disponiveis
-        
+        //commit joagadas
+        commit(jogador.commitJogadaI(),jogador.commitJogadaII());
+        jogador.resetaMovimentos();
     }
     
+    /* segunda etapa: conquisa de territorios
+     * nesta etapa o jogador ira realizar ataques sucessivos aos territorios inimigos
+     * respeitando as regras de combate
+     * os atks poderao ser alternados entre aereo e terrestre
+     */
+    
+    public void disputa(Jogador jogador){
+        /* seleciona o metodo de atk
+         * seleciona o territorio de origem e o territorio de destino
+         * seleciona o numero de exercitos que irao atacar < salva uma variavel para isso
+         * ocorre dentro do loop que verifica se o atual jogador ainda deseja atacar
+         */
+    }
 }
