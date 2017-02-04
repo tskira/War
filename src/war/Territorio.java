@@ -6,6 +6,7 @@
 package war;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ public class Territorio {
     List<Exercito> exercitosT = new ArrayList<>(); //exercitos terrestre
     List<Exercito> exercitosA = new ArrayList<>(); //exercitos aereos
     Cor dono; //cor do atual dono do territorio
+    //vetor com resultados de defesa
+    int resultadosDef[] = new int[3];
     
     Territorio(String nome, int x, int y){ //construtor
         this.nome = nome;
@@ -102,8 +105,36 @@ public class Territorio {
     }
     
     /* metedo chamado para defesa de um territorio ao ser atacado
-     *
+     * implementa polimorfismo para caso de defesa terrestre ou aerea
      */
 
+    public int[] defender(Terrestre exercito){
+        if(exercitosT.size()>=3){
+            for(int i = 0; i < 3; i++){
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        else{
+            for(int i = 0; i < exercitosT.size(); i++){
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        Arrays.sort(resultadosDef);
+        return resultadosDef;
+    }
     
+        public int[] defender(Aereo exercito){
+        if(exercitosT.size()>=3){
+            for(int i = 0; i < 3; i++){
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        else{
+            for(int i = 0; i < exercitosT.size(); i++){
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        Arrays.sort(resultadosDef);
+        return resultadosDef;
+    }
 }

@@ -17,8 +17,6 @@ public class War {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        Aereo teste = new Aereo();
-        Terrestre teste1 = new Terrestre();
         WarControle.getInstance().setJogador(2);
         WarControle.getInstance().distribuirTerritorio();
         for(Jogador p: WarControle.getInstance().jogadores()){
@@ -27,8 +25,8 @@ public class War {
                 System.out.println(t.getNome());
             }
         }
-        System.out.println(teste1.combater());
-        System.out.println(teste.combater());
+        System.out.println(Constante.AEREO.combater());
+        System.out.println(Constante.TERRESTRE.combater());
     }
    
 }

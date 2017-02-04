@@ -103,6 +103,24 @@ public class WarControle {
         for (ArgumentoAlocII args: aii){
             args.getDestino().recebeExercito(args.getExercito());
         }
-    }    
+    } 
+    
+    // os metodos a seguir definem as ações dentro de um turno da jogada
+  
+    public void distribuição(Jogador jogador){
+        Scanner scan = new Scanner(System.in);
+        int cord[] = new int[2]; //inteiro para armazenar cordenada
+        while(jogador.getTerDisp().isEmpty()){ //enquanto houverem eercitos terrestre disponiveis
+            cord[0] = scan.nextInt();
+            cord[1] = scan.nextInt();
+            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), jogador.getTerDisp().get(0));
+        } // alocou todos os exercitos terrestres disponiveis
+        while(jogador.getAerDisp().isEmpty()){ //enquanto houverem eercitos terrestre disponiveis
+            cord[0] = scan.nextInt();
+            cord[1] = scan.nextInt();
+            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), jogador.getAerDisp().get(0));
+        } //alocou todos os aereos disponiveis
+        
+    }
     
 }

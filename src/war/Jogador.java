@@ -46,6 +46,7 @@ public class Jogador {
     public void conqTerritorio(Territorio conquistado){
         terriConquistado.add(conquistado);
         conquistado.setDono(cor);
+        ganhou = verificaGanhou();
     }
     
     //metodo para retornar o numero de territorios
@@ -59,6 +60,15 @@ public class Jogador {
     //retorna cor que representa o jogador
     public Cor getCor(){return cor;}
     
+    //metodo que retorna o nro de exercitos terrestre para alocação disponiveis
+    public List<Exercito> getTerDisp(){
+        return terDisp;
+    }
+    
+    //metodo que retorna o nro de exercitos aereos disponiveis para alocação
+    public List<Exercito> getAerDisp(){
+        return aerDisp;
+    }
     //metodo para retornar o numero de continentes
     public int nroExercitos(Exercito exercito){
         if(exercito instanceof Terrestre){

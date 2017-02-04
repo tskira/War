@@ -63,18 +63,18 @@ public class AereoComb {
         //termina de adicionar exercitos para o atk
         while(esquadrilha.size() <= Constante.MAXIMO){
             Scanner in = new Scanner(System.in);
-            int x1; int y1; //cordenadoas
-            x1 = in.nextInt();
-            y1 = in.nextInt();
+            int cord[] = new int[2]; //cordenadoas
+            cord[0] = in.nextInt();
+            cord[1] = in.nextInt();
             if(range.contains(
                         WarControle.getInstance(). //singleton
                         getMapaJogo(). //classe mapa do singleton
                         getTabuleiro(). //tabuleiro do jogo
-                        get(new int[]{x1,y1}))){ //territorio selecionado
+                        get(cord))){ //territorio selecionado
                         esquadrilha.add(WarControle.getInstance().
                                         getMapaJogo().
                                         getTabuleiro().
-                                        get(new int[]{x1,y1})); //territorio do exercito fonte adicionado
+                                        get(cord)); //territorio do exercito fonte adicionado
                         }
         } //fim desse bagui loco
     }
