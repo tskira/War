@@ -120,14 +120,14 @@ public class Jogador {
     }
     
     //caso 2
-    public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito){
+    public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito, int max){
         Scanner scan = new Scanner(System.in);
         int x; //variavel para numero de exercitos a serem deslocados
         //verifica se faz fronteira com o territorio e pertence ao atual jogador
         if (origem.fazFronteira.contains(destino) && (destino.getDono() == cor) ){
         do {
             x = scan.nextInt();
-        } while (x < origem.getNroExercitos(exercito));
+        } while (x < origem.getNroExercitos(exercito) && x <= max);
             for (int i = 0; i < x; i++) {
                 alocII.add(new ArgumentoAlocII(origem, destino, exercito)); //adiciona a instrução a lista
                 origem.removeExercito(exercito); //remove exercito do territorio de origem
@@ -169,7 +169,7 @@ public class Jogador {
     public int[] atacarTerritorio(Territorio origem, Territorio alvo,
                                   Terrestre exercito, int nroAtk){
         //verifica restriçoes de ataque
-        if(origem.podeAtacar() && alvo.podeSerAtacado(origem)){
+        if(origem.podeAtacar() && alvo.podeSerAtacado(origem)){ //tem mais de 1 exercito e faz franteira
             for (int i = 0; i < nroAtk; i++){
                resultadosAtk[i] = exercito.combater();
             }
@@ -188,7 +188,6 @@ public class Jogador {
                 resultadosAtk[k] = exercito.combater();
             }
         }
-        Arrays.sort(resultadosAtk);
         return resultadosAtk;
     }
     

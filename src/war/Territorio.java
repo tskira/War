@@ -23,7 +23,7 @@ public class Territorio {
     List<Exercito> exercitosA = new ArrayList<>(); //exercitos aereos
     Cor dono; //cor do atual dono do territorio
     //vetor com resultados de defesa
-    int resultadosDef[] = new int[3];
+    int[] resultadosDef = new int[3];
     
     Territorio(String nome, int x, int y){ //construtor
         this.nome = nome;
@@ -109,8 +109,8 @@ public class Territorio {
      */
 
     public int[] defender(Terrestre exercito){
-        if(exercitosT.size()>=3){
-            for(int i = 0; i < 3; i++){
+        if(exercitosT.size()>= Constante.MAXIMO){
+            for(int i = 0; i < Constante.MAXIMO; i++){
                 resultadosDef[i] = exercito.combater();
             }
         }
@@ -124,17 +124,22 @@ public class Territorio {
     }
     
         public int[] defender(Aereo exercito){
-        if(exercitosT.size()>=3){
-            for(int i = 0; i < 3; i++){
+        if(exercitosT.size()>= Constante.MAXIMO){
+            for(int i = 0; i < Constante.MAXIMO; i++){ //tem TAM MAX DE EXERCITOS PARACOMBARE
                 resultadosDef[i] = exercito.combater();
             }
         }
         else{
-            for(int i = 0; i < exercitosT.size(); i++){
+            for(int i = 0; i < exercitosT.size(); i++){ //nao tem
                 resultadosDef[i] = exercito.combater();
             }
         }
         Arrays.sort(resultadosDef);
         return resultadosDef;
+    }
+    
+    //reseta os resutados dos dados de defena
+    public void resetaDefs(){
+        Arrays.fill(resultadosDef , 0);
     }
 }

@@ -5,7 +5,7 @@
  */
 package war;
 
-import java.util.Scanner;
+import java.util.Arrays;
 
 /**
  *
@@ -17,6 +17,11 @@ public class War {
     
     public static void main(String[] args) {
         // TODO code application logic here
+        int[] a = new int[3];
+        int[] b = {3,2,1};
+        
+        Arrays.sort(b);
+        a = b;
         WarControle.getInstance().setJogador(2);
         WarControle.getInstance().distribuirTerritorio();
         for(Jogador p: WarControle.getInstance().jogadores()){
@@ -25,8 +30,12 @@ public class War {
                 System.out.println(t.getNome());
             }
         }
-        System.out.println(Constante.AEREO.combater());
-        System.out.println(Constante.TERRESTRE.combater());
-    }
+       // System.out.println(Constante.AEREO.combater());
+       // System.out.println(Constante.TERRESTRE.combater());
+        for(int i: a){
+            System.out.println(i);
+    
+        }
+    }    
    
 }
