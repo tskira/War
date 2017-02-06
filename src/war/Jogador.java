@@ -7,6 +7,7 @@ package war;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,7 +29,12 @@ public class Jogador {
     List<ArgumentoAlocI> alocI = new ArrayList<>();
     // lista de intruçoes do jogador para alocar exercito caso 2
     List<ArgumentoAlocII> alocII = new ArrayList<>();
-    
+    //vetor de inteiros que armazena o resultado dos dados lançads
+    int resultadosAtk[] = new int[3];
+    //esquadrao de ataque combinado aereo
+    AereoComb esquadrao = new AereoComb();
+    //atributo que determina se o jogador venceu
+    boolean ganhou;
     
     Jogador(Cor c){ //construtor
         cor = c;
@@ -41,6 +47,7 @@ public class Jogador {
     public void conqTerritorio(Territorio conquistado){
         terriConquistado.add(conquistado);
         conquistado.setDono(cor);
+        ganhou = verificaGanhou();
     }
     
     //metodo para retornar o numero de territorios
@@ -54,9 +61,21 @@ public class Jogador {
     //retorna cor que representa o jogador
     public Cor getCor(){return cor;}
     
+
+    //metodo que retorna o nro de exercitos terrestre para alocação disponiveis
+    public List<Exercito> getTerDisp(){
+        return terDisp;
+    }
+    
+    //metodo que retorna o nro de exercitos aereos disponiveis para alocação
+    public List<Exercito> getAerDisp(){
+        return aerDisp;
+    }
+
     //retorna color do jogador
     public Color getColor(){ return cor.getColor();}
                 
+
     //metodo para retornar o numero de continentes
     public int nroExercitos(Exercito exercito){
         if(exercito instanceof Terrestre){
@@ -108,14 +127,14 @@ public class Jogador {
     }
     
     //caso 2
-    public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito){
+    public void alocarExercito(Territorio origem, Territorio destino, Exercito exercito, int max){
         Scanner scan = new Scanner(System.in);
         int x; //variavel para numero de exercitos a serem deslocados
         //verifica se faz fronteira com o territorio e pertence ao atual jogador
         if (origem.fazFronteira.contains(destino) && (destino.getDono() == cor) ){
         do {
             x = scan.nextInt();
-        } while (x < origem.getNroExercitos(exercito));
+        } while (x < origem.getNroExercitos(exercito) && x <= max);
             for (int i = 0; i < x; i++) {
                 alocII.add(new ArgumentoAlocII(origem, destino, exercito)); //adiciona a instrução a lista
                 origem.removeExercito(exercito); //remove exercito do territorio de origem
@@ -130,9 +149,13 @@ public class Jogador {
      * mais de uma vez
      * a lista de instrução previne esse tipo de ação
      */
-    public void commitJogada(){
-        WarControle.getInstance().commit(alocI, alocII);
+    public List<ArgumentoAlocI> commitJogadaI(){
+       return alocI;
     }
+    
+    public List<ArgumentoAlocII> commitJogadaII(){
+        return alocII;
+    }    
     
     /* metodo para resetar as referefidas listas de instruções
      * deve ser chamada a cada fim de rodada
@@ -140,5 +163,53 @@ public class Jogador {
     public void resetaMovimentos(){
         alocI.clear();
         alocII.clear();
+    }
+    
+    /* metodo que inicia o ataque a um territorio
+     * recebe como parametro o territorio alvo a ser atacado,
+     * o territorio de origem do ataque
+     * e o tipo de ataque (terrestre ou aereo)
+     * o numero de exercitos deslocados para o ataque
+     * este metodo nao implementara o metodo do commit
+     * implementa o polimorfismo
+     */
+    public int[] atacarTerritorio(Territorio origem, Territorio alvo,
+                                  Terrestre exercito, int nroAtk){
+        //verifica restriçoes de ataque
+        if(origem.podeAtacar() && alvo.podeSerAtacado(origem)){ //tem mais de 1 exercito e faz franteira
+            for (int i = 0; i < nroAtk; i++){
+               resultadosAtk[i] = exercito.combater();
+            }
+        }
+        Arrays.sort(resultadosAtk);
+        return resultadosAtk; //retorna o vetor de resultados
+    }
+    
+    /* metodo para o atk caso aereo
+     * o metodo recebe uma lista de para um ataque aereo combinado
+     */
+    public int[] atacarTerritorio(Aereo exercito, Territorio alvo){
+        if(alvo.podeSerAtacado()){
+            esquadrao.setEsquadrilha(alvo, this);
+            for(int k = 0; k < esquadrao.getEsquadrilha().size(); k++){
+                resultadosAtk[k] = exercito.combater();
+            }
+        }
+        return resultadosAtk;
+    }
+    
+    //metodo que verifica se o eujogador ven
+    public boolean verificaGanhou(){
+        int x = 0; //contador para numero de continentes conquistados
+        for(Continente c :Continente.values()){
+            if(terriConquistado.contains(c.getPaises())){
+                x++;
+            }
+        }
+        return(x>=2);
+    }
+    
+    public void resetaAtks(){
+        Arrays.fill(resultadosAtk, 0);
     }
 }

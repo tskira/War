@@ -9,13 +9,9 @@ package war;
  *
  * @author Usuario
  */
-public class Aereo extends Exercito{
-    
-    Aereo(){};
-    
-    @Override
-    public int combater(){
-        return Dado.AZUL.lancar();
-    };
-    
+public class Constante {
+   
+    public static final Terrestre TERRESTRE = new Terrestre();
+    public static final Aereo AEREO = new Aereo();
+    public static final int MAXIMO = 3;
 }

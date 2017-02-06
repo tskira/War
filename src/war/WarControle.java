@@ -32,6 +32,9 @@ public class WarControle {
     //metodo que retorna numero de jogadores em jogo
     public static int numeroPlayers(){ return players.size(); }
     
+    //metodo que pega o mapa
+    public Mapa getMapaJogo(){return mapaJogo;}
+    
     public static List<Jogador> jogadores(){
         return players;
     }
@@ -99,6 +102,193 @@ public class WarControle {
         for (ArgumentoAlocII args: aii){
             args.getDestino().recebeExercito(args.getExercito());
         }
-    }    
+    } 
     
+    // os metodos a seguir definem as ações dentro de um turno da jogada
+    
+    /* primeira etapa: distribuição dos exercitos de bonificaçao
+     * faz chamadas sucessivas do metodo alocarExercito()
+     * apos o jogador ter alocado todos os exercitos é realizado o commit dos movimentos
+     * na sequencia essas listas sao esvaziadas.
+     */
+    public void distribuição(Jogador jogador){
+        Scanner scan = new Scanner(System.in);
+        int cord[] = new int[2]; //inteiro para armazenar cordenada
+        while(jogador.getTerDisp().isEmpty()){ //enquanto houverem eercitos terrestre disponiveis
+            cord[0] = scan.nextInt();
+            cord[1] = scan.nextInt();
+            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), Constante.TERRESTRE);
+        } // alocou todos os exercitos terrestres disponiveis
+        while(jogador.getAerDisp().isEmpty()){ //enquanto houverem eercitos terrestre disponiveis
+            cord[0] = scan.nextInt();
+            cord[1] = scan.nextInt();
+            jogador.alocarExercito(mapaJogo.getTabuleiro().get(cord), Constante.AEREO);
+        } //alocou todos os aereos disponiveis
+        //commit joagadas
+        commit(jogador.commitJogadaI(),jogador.commitJogadaII());
+        jogador.resetaMovimentos();
+    }
+    
+    /* segunda etapa: conquisa de territorios
+     * nesta etapa o jogador ira realizar ataques sucessivos aos territorios inimigos
+     * respeitando as regras de combate
+     * os atks poderao ser alternados entre aereo e terrestre
+     */
+    
+    public void disputa(Jogador jogador){
+        /* seleciona o metodo de atk
+         * seleciona o territorio de origem e o territorio de destino
+         * seleciona o numero de exercitos que irao atacar < salva uma variavel para isso
+         * ocorre dentro do loop que verifica se o atual jogador ainda deseja atacar
+         */
+        
+        int acao;
+        Scanner scan = new Scanner(System.in);
+        // 1 para terrestre
+        // 2 para aereo
+        // 0 sai
+        do{ //enquanto o jogador quiser atacar, arrumar isso dpois
+            acao = scan.nextInt();
+            switch(acao){
+                case 1:{
+                    int[] atk = new int[3]; //vetor para armazenar os resultados de atk
+                    int[] def = new int[3]; //vetor para armazenar os resultados de def
+                    int numDeAtks; //variavel para o numero de exercitos deslocados para o atk
+                    /*tem q fazer a verificação de limite para atks (>1)
+                     */
+                    int[] cordOri = new int[2];
+                    int[] cordDest = new int[2];
+                    cordOri[0] = scan.nextInt();
+                    cordOri[1] = scan.nextInt(); //pega territorio de origem
+                    cordDest[0] = scan.nextInt();
+                    cordDest[1] = scan.nextInt();//pega territorio de destino
+                    numDeAtks = scan.nextInt();
+                    atk = jogador.atacarTerritorio(mapaJogo.getTabuleiro().get(cordOri),
+                                             mapaJogo.getTabuleiro().get(cordDest),
+                                             Constante.TERRESTRE,
+                                             numDeAtks); //recebe resultados do dado laranja
+                    def = mapaJogo.getTabuleiro().get(cordDest).defender(Constante.TERRESTRE); //recebe resultados do dado azul
+                    for(int i = (numDeAtks - 1); i >= 0 ; i--){ //inverter o for por causa do Arrays.sort
+                        if (atk[i] > def[i]){ // atk venceu
+                            mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.TERRESTRE);
+                        } 
+                        else{ //atk empatou ou perdeu
+                            mapaJogo.getTabuleiro().get(cordOri).removeExercito(Constante.TERRESTRE);
+                        }
+                    }//fim do para
+                    mapaJogo.getTabuleiro().get(cordDest).resetaDefs(); //reseta os dados de defesa
+                    jogador.resetaAtks(); //reseta os dados de atk
+                    if(mapaJogo.getTabuleiro().get(cordDest).getNroExercitos(Constante.TERRESTRE) == 0){ //caso conquistou o territorio
+                        jogador.conqTerritorio(mapaJogo.getTabuleiro().get(cordDest));
+                        jogador.alocarExercito(mapaJogo.getTabuleiro().get(cordOri),
+                                               mapaJogo.getTabuleiro().get(cordDest),
+                                               Constante.TERRESTRE, numDeAtks);
+                        commit(jogador.commitJogadaI(), jogador.commitJogadaII());
+                        jogador.resetaMovimentos();
+                    }
+                    break;
+                }//fim do case terrestre
+                
+                case 2:{
+                    int[] atk = new int[3];
+                    int[] cordDest = new int[2];
+                    cordDest[0] = scan.nextInt();
+                    cordDest[1] = scan.nextInt(); //pega o territorio alvo
+                    atk = jogador.atacarTerritorio(Constante.AEREO, mapaJogo.getTabuleiro().get(cordDest));
+                    for(int i = 0; i < Constante.MAXIMO; i++){
+                        switch (atk[i]){
+                            case 0:
+                                break;
+                            case 1: {
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.AEREO);//remove 1 areo
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.TERRESTRE); //remove 1 terrestre
+                                break;
+                            }//fim do caso 1
+                            
+                            case 2: {
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.AEREO); //remove 1 aereo
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.TERRESTRE);
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.TERRESTRE); //remove 2 terrestre
+                                break;
+                            }//fim do case 2
+                            
+                            case 3:{
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.AEREO); //remove 1 aereo
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.TERRESTRE);
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.TERRESTRE); 
+                                mapaJogo.getTabuleiro().get(cordDest).removeExercito(Constante.TERRESTRE);//remove 3 terrestres
+                                break;
+                            }//fim do case 3
+                        }//fim doc case interno
+                    }
+                jogador.resetaAtks();
+                break;
+                }//fim do case aereo
+                default:
+                    break;
+                    
+            }//fim da clausula switch
+        }while( acao != 0);
+    }
+    /* metodo para a etapa final do turno
+     * remanejamento de exercitos
+     * utiliza o metodo alocII do jogador
+     */
+    
+    public void remanejar(Jogador jogador){
+        Scanner scan = new Scanner(System.in);
+        int flag;
+        int[] cordOri = new int[2]; //territorio origem
+        int[] cordDest = new int[2]; //territorio de destino
+        flag = scan.nextInt(); //1 para remanejar
+        while(flag != 1){
+            int tipo; //1 para terrestre 0 para aereo
+            cordOri[0] = scan.nextInt();
+            cordOri[1] = scan.nextInt();
+            cordOri[0] = scan.nextInt();
+            cordOri[1] = scan.nextInt();
+            tipo = scan.nextInt();
+            if(tipo == 0){ //caso aereo
+                jogador.alocarExercito(mapaJogo.getTabuleiro().get(cordOri),
+                        mapaJogo.getTabuleiro().get(cordDest),
+                        Constante.AEREO,
+                        mapaJogo.getTabuleiro().get(cordDest).getNroExercitos(Constante.AEREO));
+            }
+            else{ //caso terrestre
+                jogador.alocarExercito(mapaJogo.getTabuleiro().get(cordOri),
+                        mapaJogo.getTabuleiro().get(cordDest),
+                        Constante.TERRESTRE,
+                        mapaJogo.getTabuleiro().get(cordDest).getNroExercitos(Constante.TERRESTRE));
+            }
+            flag = scan.nextInt();
+        }
+        commit(jogador.commitJogadaI(), jogador.commitJogadaII()); //comita os remanejamentos
+        jogador.resetaMovimentos();
+        
+    }
+    
+    /* metodo para iniciar o joguin
+     * recebe como parametro o numero de jogadores
+     * termina quando algum deles vencer
+     */
+    public void jogar(int nroDeJogadores){
+        int nroDeTurnos = -1; //inteiro para armazenar numero de rodadas
+        //inicializando mapa de jogo
+        mapaJogo.setVizinhos();
+        //setando jogadores
+        setJogador(nroDeJogadores);
+        //distribuindo territorios
+        distribuirTerritorio();
+        //alternando rodadas
+        boolean acabou = false;
+        do{
+            nroDeTurnos++;
+            Jogador j = players.get(nroDeTurnos%numeroPlayers()); //seleciona o atual jogador
+            atribuirExercBonus(j); //bonifica exercitos
+            distribuição(j); //fase de distribuiição
+            disputa(j); //fase de atques
+            remanejar(j); //remaneja exercitos e acaba
+            acabou = j.verificaGanhou();
+        }while(!acabou);
+    }
 }

@@ -6,6 +6,7 @@
 package war;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,11 +22,31 @@ public class Territorio {
     List<Exercito> exercitosT = new ArrayList<>(); //exercitos terrestre
     List<Exercito> exercitosA = new ArrayList<>(); //exercitos aereos
     Cor dono; //cor do atual dono do territorio
+    //vetor com resultados de defesa
+    int[] resultadosDef = new int[3];
     
     Territorio(String nome, int x, int y){ //construtor
         this.nome = nome;
         cordX = x;
         cordY = y;
+    }
+    
+       
+    //alguns metodos get e set
+    
+    public String getNome(){return nome;}
+    
+    public void setDono(Cor c){dono = c;}
+    
+    public Cor getDono(){ return dono;}
+    
+    public int getCordX(){ return cordX;}
+    
+    public int getCordY(){ return cordY;}
+    
+    // metodo para pegar os paises fronteira
+    public List<Territorio> fronteira(){
+        return fazFronteira;
     }
     
     /* metodo para atribuir exercito a um territorio
@@ -39,6 +60,7 @@ public class Territorio {
             exercitosA.add(exercito);
         }
     }
+ 
     /* metodo para exercito exercito do territorio
      * utiliza sobrecarga interna
      */
@@ -51,6 +73,9 @@ public class Territorio {
         }      
     }
     
+    /* metodo para retornar o numero de exercitos
+     * de acordo com o parametro retorna o tamanho de aereo ou terrestre
+     */
     public int getNroExercitos(Exercito exercito){
         if (exercito instanceof Terrestre){
             return exercitosT.size();
@@ -59,14 +84,62 @@ public class Territorio {
             return exercitosA.size();
         }
     }
-    public String getNome(){return nome;}
     
-    public void setDono(Cor c){dono = c;}
+    /* os metodos a seguir verificar a possibilidade de atacar determinado territorio
+     * utiliza polimorfismo
+     */
     
-    public Cor getDono(){ return dono;}
+    //primeiro caso pra um ataque terrestre
+    public boolean podeSerAtacado(Territorio origem){
+        return (fazFronteira.contains(origem)); //aqui cabe um tratamento de erro
+    }
+    //segundo caso para um ataque aereo
+    public boolean podeSerAtacado(){
+        return ((getNroExercitos(Constante.TERRESTRE) > 3 )&& 
+                 getNroExercitos(Constante.AEREO) > 1 );
+    }
     
-    public int getCordX(){ return cordX;}
+    //metodo que verifica a permanencia de pelo menos 1 exercito no territorio
+    public boolean podeAtacar(){
+        return (getNroExercitos(Constante.TERRESTRE) > 0);
+    }
     
-    public int getCordY(){ return cordY;}
+    /* metedo chamado para defesa de um territorio ao ser atacado
+     * implementa polimorfismo para caso de defesa terrestre ou aerea
+     */
+
+    public int[] defender(Terrestre exercito){
+        if(exercitosT.size()>= Constante.MAXIMO){
+            for(int i = 0; i < Constante.MAXIMO; i++){
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        else{
+            for(int i = 0; i < exercitosT.size(); i++){
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        Arrays.sort(resultadosDef);
+        return resultadosDef;
+    }
     
+        public int[] defender(Aereo exercito){
+        if(exercitosT.size()>= Constante.MAXIMO){
+            for(int i = 0; i < Constante.MAXIMO; i++){ //tem TAM MAX DE EXERCITOS PARACOMBARE
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        else{
+            for(int i = 0; i < exercitosT.size(); i++){ //nao tem
+                resultadosDef[i] = exercito.combater();
+            }
+        }
+        Arrays.sort(resultadosDef);
+        return resultadosDef;
+    }
+    
+    //reseta os resutados dos dados de defena
+    public void resetaDefs(){
+        Arrays.fill(resultadosDef , 0);
+    }
 }
