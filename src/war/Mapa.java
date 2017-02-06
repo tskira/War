@@ -30,7 +30,7 @@ public class Mapa {
          * determina e retorna a lista de seus vizinhos
          */
         
-        public void setVizinhos(Territorio territorio){
+        public void setVizinhos(){
             for(Continente c : Continente.values()){
                 for(Territorio t: c.getPaises()){
                     vizinhos(t);

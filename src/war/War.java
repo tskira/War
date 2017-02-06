@@ -18,7 +18,7 @@ public class War {
     public static void main(String[] args) {
         // TODO code application logic here
         int[] a = new int[3];
-        int[] b = {3,2,1};
+        int[] b = {3,6,1};
         
         Arrays.sort(b);
         a = b;

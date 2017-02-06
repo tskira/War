@@ -179,7 +179,7 @@ public class WarControle {
                     }//fim do para
                     mapaJogo.getTabuleiro().get(cordDest).resetaDefs(); //reseta os dados de defesa
                     jogador.resetaAtks(); //reseta os dados de atk
-                    if(mapaJogo.getTabuleiro().get(cordDest).getNroExercitos(Constante.TERRESTRE) == 0){
+                    if(mapaJogo.getTabuleiro().get(cordDest).getNroExercitos(Constante.TERRESTRE) == 0){ //caso conquistou o territorio
                         jogador.conqTerritorio(mapaJogo.getTabuleiro().get(cordDest));
                         jogador.alocarExercito(mapaJogo.getTabuleiro().get(cordOri),
                                                mapaJogo.getTabuleiro().get(cordDest),
@@ -222,14 +222,74 @@ public class WarControle {
                             }//fim do case 3
                         }//fim doc case interno
                     }
+                jogador.resetaAtks();
                 break;
                 }//fim do case aereo
+                default:
+                    break;
                     
             }//fim da clausula switch
         }while( acao != 0);
     }
+    /* metodo para a etapa final do turno
+     * remanejamento de exercitos
+     * utiliza o metodo alocII do jogador
+     */
     
-    public void alocar(Jogador jogador){
+    public void remanejar(Jogador jogador){
+        Scanner scan = new Scanner(System.in);
+        int flag;
+        int[] cordOri = new int[2]; //territorio origem
+        int[] cordDest = new int[2]; //territorio de destino
+        flag = scan.nextInt(); //1 para remanejar
+        while(flag != 1){
+            int tipo; //1 para terrestre 0 para aereo
+            cordOri[0] = scan.nextInt();
+            cordOri[1] = scan.nextInt();
+            cordOri[0] = scan.nextInt();
+            cordOri[1] = scan.nextInt();
+            tipo = scan.nextInt();
+            if(tipo == 0){ //caso aereo
+                jogador.alocarExercito(mapaJogo.getTabuleiro().get(cordOri),
+                        mapaJogo.getTabuleiro().get(cordDest),
+                        Constante.AEREO,
+                        mapaJogo.getTabuleiro().get(cordDest).getNroExercitos(Constante.AEREO));
+            }
+            else{ //caso terrestre
+                jogador.alocarExercito(mapaJogo.getTabuleiro().get(cordOri),
+                        mapaJogo.getTabuleiro().get(cordDest),
+                        Constante.TERRESTRE,
+                        mapaJogo.getTabuleiro().get(cordDest).getNroExercitos(Constante.TERRESTRE));
+            }
+            flag = scan.nextInt();
+        }
+        commit(jogador.commitJogadaI(), jogador.commitJogadaII()); //comita os remanejamentos
+        jogador.resetaMovimentos();
         
+    }
+    
+    /* metodo para iniciar o joguin
+     * recebe como parametro o numero de jogadores
+     * termina quando algum deles vencer
+     */
+    public void jogar(int nroDeJogadores){
+        int nroDeTurnos = -1; //inteiro para armazenar numero de rodadas
+        //inicializando mapa de jogo
+        mapaJogo.setVizinhos();
+        //setando jogadores
+        setJogador(nroDeJogadores);
+        //distribuindo territorios
+        distribuirTerritorio();
+        //alternando rodadas
+        boolean acabou = false;
+        do{
+            nroDeTurnos++;
+            Jogador j = players.get(nroDeTurnos%numeroPlayers()); //seleciona o atual jogador
+            atribuirExercBonus(j); //bonifica exercitos
+            distribuição(j); //fase de distribuiição
+            disputa(j); //fase de atques
+            remanejar(j); //remaneja exercitos e acaba
+            acabou = j.verificaGanhou();
+        }while(!acabou);
     }
 }
