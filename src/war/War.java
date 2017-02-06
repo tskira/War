@@ -5,30 +5,26 @@
  */
 package war;
 
-import java.util.Scanner;
-
 /**
  *
  * @author Usuario
  */
 
-public class War {
-    
+public class War {    
     
     public static void main(String[] args) {
         // TODO code application logic here
         Aereo teste = new Aereo();
         Terrestre teste1 = new Terrestre();
-        WarControle.getInstance().setJogador(2);
-        WarControle.getInstance().distribuirTerritorio();
-        for(Jogador p: WarControle.getInstance().jogadores()){
+        WarControle.setJogador(2);
+        WarControle.distribuirTerritorio();
+        for(Jogador p: WarControle.jogadores()){
             System.out.println("--------------------------------------------");
             for(Territorio t: p.getTerritorio()){
                 System.out.println(t.getNome());
             }
         }
         System.out.println(teste1.Combater());
-        System.out.println(teste.Combater());
-    }
+        System.out.println(teste.Combater());    }
    
 }

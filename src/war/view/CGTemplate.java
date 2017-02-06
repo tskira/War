@@ -1,4 +1,4 @@
-package war.graphics;
+package war.view;
 
 import java.awt.*;       // Using AWT's Graphics and Color
 import java.awt.image.BufferedImage;
@@ -45,18 +45,16 @@ public class CGTemplate extends JFrame {
       }
       
       public void paintBrazil(Graphics g){
-          BufferedImage image = null;
-          try {
-            URL url = getClass().getResource("200.png");
+        String pathToImageSortBy = "200.png";
+        BufferedImage image = null;
+        try {
+            URL url = getClass().getResource(pathToImageSortBy);
             image = ImageIO.read(url);
           } catch (IOException e) {
               System.out.println("n foi");
           }
           for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
-                if (image.getTransparency() == 3)
-                    image.getRGB(j, j)
-                    image.setRGB(i, j, new Color(255, 0, 0, 127).getRGB());
             }
           }
           g.drawImage(image, 10, 10, this);

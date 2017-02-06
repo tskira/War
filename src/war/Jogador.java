@@ -5,6 +5,7 @@
  */
 package war;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -53,6 +54,9 @@ public class Jogador {
     //retorna cor que representa o jogador
     public Cor getCor(){return cor;}
     
+    //retorna color do jogador
+    public Color getColor(){ return cor.getColor();}
+                
     //metodo para retornar o numero de continentes
     public int nroExercitos(Exercito exercito){
         if(exercito instanceof Terrestre){
