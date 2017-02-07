@@ -7,20 +7,13 @@ package war;
 
 import java.util.Scanner;
 
+
 /**
  *
  * @author Usuario
  */
 
-public class War {
-    
+public class War {    
     
     public static void main(String[] args) {
         // TODO code application logic here
-        Scanner scan = new Scanner(System.in);
-        int x = scan.nextInt();
-        WarControle.getInstance().jogar(x);
-        
-    }    
-   
-}
