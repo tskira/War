@@ -5,7 +5,7 @@
  */
 package war;
 
-import java.util.Arrays;
+import java.util.Scanner;
 
 
 /**
@@ -17,6 +17,3 @@ public class War {
     
     public static void main(String[] args) {
         // TODO code application logic here
-
-
-}

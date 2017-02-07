@@ -51,7 +51,7 @@ public class Mapa {
             territorio.fazFronteira.add(mapa.get
                        (new int[]{territorio.getCordX(),
                        (territorio.getCordY()+1)%8}));
-            territorio.fazFronteira.removeAll(null); //remove territorios adicionados vazios
+            territorio.removeNull();
             
         }    
         
