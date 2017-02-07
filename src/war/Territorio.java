@@ -8,6 +8,7 @@ package war;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -47,6 +48,11 @@ public class Territorio {
     // metodo para pegar os paises fronteira
     public List<Territorio> fronteira(){
         return fazFronteira;
+    }
+    
+    //remove elementos null da lista
+    public void removeNull(){
+        fazFronteira.removeIf(Objects::isNull);
     }
     
     /* metodo para atribuir exercito a um territorio
